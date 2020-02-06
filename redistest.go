@@ -49,6 +49,7 @@ func Start() (*Redis, error) {
 	sock := fmt.Sprintf("%s/redis.sock", sockDir)
 	configFile := path.Join(dir, "redis.cnf")
 	err = ioutil.WriteFile(configFile, []byte(fmt.Sprintf(`
+port 0
 unixsocket %s
 appendonly no
 `, sock)), 0644)
