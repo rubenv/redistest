@@ -25,6 +25,14 @@ func TestRedis(t *testing.T) {
 	assert.NoError(err)
 	assert.Equal(s, "bar")
 
+	// Can also use exposed info to dial ourselves
+	conn, err = redis.Dial(red.Network, red.Address)
+	assert.NoError(err)
+	assert.NotNil(conn)
+
+	_, err = conn.Do("PING")
+	assert.NoError(err)
+
 	err = red.Stop()
 	assert.NoError(err)
 }
