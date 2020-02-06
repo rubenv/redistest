@@ -1,0 +1,13 @@
+language: go
+
+sudo: false
+
+services:
+    - redis
+
+install:
+    - go get -t ./...
+    - go install ./...
+
+script:
+    - go test -v ./...
