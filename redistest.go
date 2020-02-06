@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"syscall"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -144,6 +145,20 @@ func (p *Redis) Stop() error {
 	}
 
 	return nil
+}
+
+// Hang the server, good for testing blocked connections
+func (s *Redis) Freeze() {
+	if s.cmd != nil {
+		s.cmd.Process.Signal(syscall.SIGSTOP)
+	}
+}
+
+// Resume the server
+func (s *Redis) Continue() {
+	if s.cmd != nil {
+		s.cmd.Process.Signal(syscall.SIGCONT)
+	}
 }
 
 // Needed because Ubuntu doesn't put initdb in $PATH
