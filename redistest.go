@@ -18,9 +18,17 @@ import (
 )
 
 type Redis struct {
-	dir  string
-	cmd  *exec.Cmd
+	dir string
+	cmd *exec.Cmd
+
+	// A redis pool pre-configured to talk to the redis server
 	Pool *redis.Pool
+
+	// Network protocol to pass to redis.Dial()
+	Network string
+
+	// Address to pass to redis.Dial()
+	Address string
 
 	stderr io.ReadCloser
 	stdout io.ReadCloser
@@ -47,13 +55,17 @@ func Start() (*Redis, error) {
 	}
 
 	// Config file
-	sock := fmt.Sprintf("%s/redis.sock", sockDir)
+	//
+	// We're always using unix sockets, but if someone wants to make this
+	// conditional and use TCP sockets on Windows: feel free to send a PR.
+	network := "unix"
+	address := fmt.Sprintf("%s/redis.sock", sockDir)
 	configFile := path.Join(dir, "redis.cnf")
 	err = ioutil.WriteFile(configFile, []byte(fmt.Sprintf(`
 port 0
 unixsocket %s
 appendonly no
-`, sock)), 0644)
+`, address)), 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +99,7 @@ appendonly no
 	// Connect to Redis
 	pool := &redis.Pool{
 		Dial: func() (redis.Conn, error) {
-			return redis.Dial("unix", sock)
+			return redis.Dial(network, address)
 		},
 	}
 
@@ -106,7 +118,9 @@ appendonly no
 		cmd: cmd,
 		dir: dir,
 
-		Pool: pool,
+		Pool:    pool,
+		Network: network,
+		Address: address,
 
 		stderr: stderr,
 		stdout: stdout,
