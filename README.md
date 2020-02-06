@@ -2,7 +2,7 @@
 
 > Go library to spawn single-use Redis servers for unit testing
 
-[![Build Status](https://github.com/rubenv/redistest/workflows/Test/badge.svg)](https://github.com/rubenv/redistest/actions) [![GoDoc](https://godoc.org/github.com/rubenv/redistest?status.png)](https://godoc.org/github.com/rubenv/redistest)
+[![Build Status](https://github.com/rubenv/redistest/workflows/Test/badge.svg)](https://github.com/rubenv/redistest/actions) [![Build Status](https://travis-ci.org/rubenv/redistest.svg?branch=master)](https://travis-ci.org/rubenv/redistest) [![GoDoc](https://godoc.org/github.com/rubenv/redistest?status.png)](https://godoc.org/github.com/rubenv/redistest)
 
 Spawns a Redis server. Ideal for unit tests where you want a clean instance
 each time. Then clean up afterwards.
