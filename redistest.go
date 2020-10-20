@@ -130,32 +130,32 @@ appendonly no
 }
 
 // Stop the database and remove storage files.
-func (p *Redis) Stop() error {
-	if p == nil {
+func (s *Redis) Stop() error {
+	if s == nil {
 		return nil
 	}
 
 	defer func() {
 		// Always try to remove it
-		os.RemoveAll(p.dir)
+		os.RemoveAll(s.dir)
 	}()
 
-	err := p.cmd.Process.Signal(os.Interrupt)
+	err := s.cmd.Process.Signal(os.Interrupt)
 	if err != nil {
 		return err
 	}
 
-	err = p.cmd.Wait()
+	err = s.cmd.Wait()
 	if err != nil {
 		return err
 	}
 
-	if p.stderr != nil {
-		p.stderr.Close()
+	if s.stderr != nil {
+		s.stderr.Close()
 	}
 
-	if p.stdout != nil {
-		p.stdout.Close()
+	if s.stdout != nil {
+		s.stdout.Close()
 	}
 
 	return nil
