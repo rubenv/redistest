@@ -65,6 +65,7 @@ func Start() (*Redis, error) {
 port 0
 unixsocket %s
 appendonly no
+save ""
 `, address)), 0644)
 	if err != nil {
 		return nil, err
